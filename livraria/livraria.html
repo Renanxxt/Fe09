@@ -1,0 +1,197 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livraria Lumina</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <header class="topo">
+    <span class="marca">LUMINA LIVROS</span>
+  </header>
+
+  <section class="hero">
+    <h1>Histórias que transformam vidas</h1>
+    <p>Conheça nossa seleção de clássicos e receba o catálogo de lançamentos.</p>
+    <button id="btn-catalogo" class="btn-hero" onclick="obterCatalogo()">
+      Baixar catálogo
+    </button>
+  </section>
+
+  <section class="secao">
+    <h2>Clube do Livro Mensal</h2>
+
+    <div id="card-clube" class="card">
+      <h3>Assinatura Lumina</h3>
+      <p class="descricao">
+        Receba 1 livro surpresa + brindes exclusivos todo mês
+      </p>
+      <div class="preco">R$ 59,90 / mês</div>
+      <p class="observacao">
+        (Passe o cursor para ver o destaque)
+      </p>
+    </div>
+  </section>
+
+  <section class="secao">
+    <h2>Cupom Especial de Boas-Vindas</h2>
+
+    <div class="box-cupom">
+      <label for="valor-livro">Preço do Livro (R$):</label>
+
+      <input
+        type="number"
+        id="valor-livro"
+        value="100"
+        min="0"
+      >
+
+      <br>
+
+      <button id="btn-cupom" class="btn-acao">
+        Aplicar 15% de Desconto
+      </button>
+
+      <div id="resultado-cupom" class="resultado"></div>
+    </div>
+  </section>
+
+  <section class="secao">
+    <h2>Espaço do Leitor</h2>
+
+    <div class="form">
+      <label for="leitor">Seu Nome</label>
+
+      <input
+        type="text"
+        id="leitor"
+        placeholder="Digite seu nome e tecle Enter"
+      >
+
+      <label for="resenha">
+        Escreva uma mini-resenha do seu livro favorito
+      </label>
+
+      <textarea
+        id="resenha"
+        maxlength="150"
+        placeholder="Conte o que achou da obra (máximo 150 caracteres)"
+      ></textarea>
+
+      <div class="contador" id="contador-resenha">
+        0 / 150
+      </div>
+    </div>
+  </section>
+
+  <footer class="rodape">
+    <p>© 2026 Livraria Lumina — O portal dos apaixonados por leitura.</p>
+  </footer>
+
+  <script>
+    // BUG 1 - Catálogo
+    function obterCatalogo() {
+      alert("Catálogo enviado com sucesso! Verifique sua caixa de entrada.");
+    }
+
+    // BUG 2 - Saudação do leitor
+    document.getElementById("leitor")
+      .addEventListener("change", saudarLeitor);
+
+    function saudarLeitor() {
+      let campo = document.getElementById("leitor");
+      let nome = campo.value.trim();
+
+      if (nome) {
+        alert("Olá, " + nome + "! Que bom ter você na Lumina.");
+      }
+    }
+
+    // BUG 3 - Destaque do clube
+    const cardClube = document.getElementById("card-clube");
+
+    cardClube.addEventListener("mouseenter", destacarClube);
+    cardClube.addEventListener("mouseleave", restaurarClube);
+
+    function destacarClube() {
+      this.style.background = "#fef3c7";
+      this.style.borderColor = "#d97706";
+    }
+
+    function restaurarClube() {
+      this.style.background = "#ffffff";
+      this.style.borderColor = "#e2e8f0";
+    }
+
+    // BUG 4 - Cupom de desconto
+    function aplicarCupomDesconto(valor) {
+      const taxaDesconto = 0.15;
+      let desconto = valor * taxaDesconto;
+      let valorFinal = valor - desconto;
+
+      return valorFinal;
+    }
+
+    function calcularCupom() {
+      let valor = parseFloat(
+        document.getElementById("valor-livro").value
+      );
+
+      let resultado = document.getElementById("resultado-cupom");
+
+      if (isNaN(valor) || valor < 0) {
+        resultado.textContent = "Digite um preço válido.";
+        resultado.style.color = "#dc2626";
+        return;
+      }
+
+      let total = aplicarCupomDesconto(valor);
+
+      resultado.style.color = "#16a34a";
+      resultado.textContent =
+        "Total com desconto: R$ " + total.toFixed(2).replace(".", ",");
+    }
+
+    document.getElementById("btn-cupom")
+      .addEventListener("click", calcularCupom);
+
+    // BUG 5 - Contador de caracteres
+    function contarCaracteresResenha(texto) {
+      let contagem = 0;
+
+      for (let i = 0; i < texto.length; i++) {
+        contagem = contagem + 1;
+      }
+
+      return contagem;
+    }
+
+    function atualizarContadorResenha() {
+      let texto = document.getElementById("resenha").value;
+      let total = contarCaracteresResenha(texto);
+
+      let elemento = document.getElementById("contador-resenha");
+
+      elemento.textContent = total + " / 150";
+
+      if (total >= 150) {
+        elemento.style.color = "#dc2626";
+      } else {
+        elemento.style.color = "#64748b";
+      }
+
+      console.log("Contador da resenha: " + total);
+    }
+
+    document.getElementById("resenha")
+      .addEventListener("input", atualizarContadorResenha);
+  </script>
+
+</body>
+</html>
+
